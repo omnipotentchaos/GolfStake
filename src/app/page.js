@@ -49,7 +49,7 @@ export default function Home() {
         <div className={`container ${styles.navInner}`}>
           <div className={styles.logo}>
             <span className={styles.logoIcon}>⬡</span>
-            <span>GreenStake</span>
+            <span>GolfStake</span>
           </div>
           <div className={styles.navLinks}>
             <a href="#how-it-works">How It Works</a>
@@ -271,7 +271,7 @@ export default function Home() {
           <div className={styles.footerBrand}>
             <div className={styles.logo}>
               <span className={styles.logoIcon}>⬡</span>
-              <span>GreenStake</span>
+              <span>GolfStake</span>
             </div>
             <p className={styles.footerDesc}>A golf subscription platform combining performance tracking, monthly prize draws, and charitable giving.</p>
           </div>
@@ -290,7 +290,7 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.footerBottom}>
-            <p>© 2026 GreenStake. All rights reserved.</p>
+            <p>© 2026 GolfStake. All rights reserved.</p>
           </div>
         </div>
       </footer>

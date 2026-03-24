@@ -71,13 +71,18 @@ export function AuthProvider({ children }) {
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: { 
+          full_name: fullName,
+          phone: phone || null,
+          country: country || null
+        },
       },
     });
     if (error) throw error;
 
-    // Create profile
-    if (data.user) {
+    // We still try to upsert from client as a fallback, but we ignore RLS errors 
+    // because the database trigger (handle_new_user) will handle it securely.
+    if (data.user && data.session) {
       const { error: profileError } = await supabase.from('profiles').upsert({
         id: data.user.id,
         full_name: fullName,
@@ -85,7 +90,10 @@ export function AuthProvider({ children }) {
         country: country || null,
         role: 'user',
       });
-      if (profileError) console.error('Profile creation error:', profileError);
+      if (profileError && profileError.code !== '42501') { 
+        // Ignore 42501 (RLS denied) because the trigger handles it, log other errors
+        console.error('Profile creation fallback error:', profileError);
+      }
     }
 
     return data;
