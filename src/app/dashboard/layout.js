@@ -62,6 +62,7 @@ export default function DashboardLayout({ children }) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 className={`sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}
               >
                 <span className="sidebar-icon">{item.icon}</span>
@@ -73,7 +74,7 @@ export default function DashboardLayout({ children }) {
           {profile?.role === 'admin' && (
             <>
               <div className="sidebar-section-label" style={{ marginTop: '2rem' }}>Administration</div>
-              <Link href="/admin" className="sidebar-link">
+              <Link href="/admin" prefetch={false} className="sidebar-link">
                 <span className="sidebar-icon">⚙️</span>
                 Admin Panel
               </Link>
