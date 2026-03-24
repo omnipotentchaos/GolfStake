@@ -1,0 +1,633 @@
+/* ====================================================================
+   Homepage Styles — Emotion-driven, modern landing page
+   ==================================================================== */
+
+.page {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* ─── Nav ─── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 0;
+  background: rgba(6, 11, 20, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--color-text);
+}
+
+.logoIcon {
+  color: var(--color-secondary);
+  font-size: 1.5rem;
+}
+
+.navLinks {
+  display: flex;
+  gap: 2rem;
+}
+
+.navLinks a {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.navLinks a:hover {
+  color: var(--color-text);
+}
+
+.navActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.mobileMenuBtn {
+  display: none;
+  font-size: 1.3rem;
+  color: var(--color-text);
+  background: none;
+  border: none;
+}
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 8rem 0 4rem;
+  overflow: hidden;
+}
+
+.heroGlow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: -100px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(0, 200, 150, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.heroGlow2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  bottom: -100px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(255, 179, 71, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+.heroContent {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: rgba(0, 200, 150, 0.1);
+  border: 1px solid rgba(0, 200, 150, 0.2);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-secondary);
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.heroBadgeDot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-secondary);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.heroTitle {
+  font-family: var(--font-primary);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.6s ease both 0.1s;
+}
+
+.heroAccent {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+  animation: fadeInUp 0.6s ease both 0.2s;
+}
+
+.heroCTA {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.6s ease both 0.3s;
+}
+
+.heroStats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  background: var(--gradient-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem 3rem;
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease both 0.4s;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.heroStatValue {
+  font-family: var(--font-primary);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-secondary-light);
+}
+
+.heroStatLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.heroStatDivider {
+  width: 1px;
+  background: var(--color-border);
+}
+
+/* ─── Steps ─── */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.step {
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.step:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.stepNumber {
+  font-family: var(--font-primary);
+  font-size: 4rem;
+  font-weight: 900;
+  color: rgba(0, 200, 150, 0.06);
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  line-height: 1;
+}
+
+.stepIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.stepTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.stepDesc {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* ─── Prize Cards ─── */
+.prizeSection {
+  background: linear-gradient(180deg, transparent, rgba(0, 200, 150, 0.02), transparent);
+}
+
+.prizeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.prizeCard {
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.prizeCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-light);
+}
+
+.prizeJackpot {
+  border-color: rgba(255, 179, 71, 0.3);
+  background: linear-gradient(145deg, rgba(255, 179, 71, 0.08) 0%, rgba(13, 27, 42, 0.4) 100%);
+}
+
+.prizeGlow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: -60px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(255, 179, 71, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.prizeLabel {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  background: var(--gradient-accent);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.prizeMatch {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.prizeShare {
+  font-family: var(--font-primary);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--color-secondary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.prizeDesc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── Charity Cards ─── */
+.charityGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.charityCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.charityIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.charityName {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.charityDesc {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.charityRaised {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  width: 100%;
+}
+
+.charityRaisedValue {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-secondary);
+}
+
+.charityRaisedLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── Pricing ─── */
+.pricingSection {
+  background: linear-gradient(180deg, transparent, rgba(0, 200, 150, 0.02), transparent);
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.pricingCard {
+  background: var(--gradient-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2rem;
+  position: relative;
+  transition: all var(--transition-base);
+}
+
+.pricingCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-light);
+}
+
+.pricingFeatured {
+  border-color: var(--color-secondary);
+  background: linear-gradient(145deg, rgba(0, 200, 150, 0.06) 0%, rgba(13, 27, 42, 0.6) 100%);
+}
+
+.pricingSave {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: var(--gradient-accent);
+  color: var(--color-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.pricingPlan {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pricingPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.15rem;
+  margin-bottom: 2rem;
+}
+
+.pricingCurrency {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.pricingAmount {
+  font-family: var(--font-primary);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.pricingPeriod {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.pricingFeatures {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+
+.pricingFeatures li {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+/* ─── CTA Section ─── */
+.ctaSection {
+  padding: 6rem 0;
+}
+
+.ctaTitle {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.ctaSubtitle {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ─── Footer ─── */
+.footer {
+  border-top: 1px solid var(--color-border);
+  padding: 4rem 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footerInner {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.footerBrand {
+  max-width: 350px;
+}
+
+.footerDesc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.75rem;
+  line-height: 1.6;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 4rem;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footerCol h4 {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footerCol a {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  transition: color var(--transition-fast);
+}
+
+.footerCol a:hover {
+  color: var(--color-secondary);
+}
+
+.footerBottom {
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.footerBottom p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .charityGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+
+  .navActions {
+    display: none;
+  }
+
+  .mobileMenuBtn {
+    display: block;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroStats {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .heroStatDivider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .heroStat {
+    padding: 0;
+  }
+
+  .stepsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .prizeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .charityGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricingGrid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+
+  .heroCTA {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ctaTitle {
+    font-size: 1.75rem;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
