@@ -27,21 +27,19 @@ export default function Home() {
       
       try {
         const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-        if (usersCount) targets.members = usersCount;
+          // If we actually have a meaningful amount of data in DB, use it, otherwise keep the marketing targets
+          if (usersCount && usersCount > 10) targets.members = usersCount;
 
-        const { data: draws } = await supabase.from('draws').select('prize_pool_total');
-        if (draws && draws.length > 0) {
-          targets.prize = draws.reduce((acc, d) => acc + Number(d.prize_pool_total || 0), 0);
-        }
+          const { data: draws } = await supabase.from('draws').select('prize_pool_total');
+          if (draws && draws.length > 0) {
+            const actualPrize = draws.reduce((acc, d) => acc + Number(d.prize_pool_total || 0), 0);
+            if (actualPrize > 0) targets.prize = actualPrize;
+          }
 
-        const { data: charitiesList } = await supabase.from('charities').select('total_received');
-        if (charitiesList && charitiesList.length > 0) {
-          targets.charity = charitiesList.reduce((acc, c) => acc + Number(c.total_received || 0), 0);
-        }
-      } catch (err) {
-        console.warn('Using fallback stats for counter:', err);
-      }
-
+          const { data: charitiesList } = await supabase.from('charities').select('total_received');
+          if (charitiesList && charitiesList.length > 0) {
+            const actualCharity = charitiesList.reduce((acc, c) => acc + Number(c.total_received || 0), 0);
+            if (actualCharity > 0) targets.charity = actualCharity;
       const duration = 2000;
       const steps = 60;
       const interval = duration / steps;
