@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
-          await fetchProfile(session.user.id);
+          fetchProfile(session.user.id); // Removed await to prevent spinner hanging
         } else {
           setProfile(null);
         }

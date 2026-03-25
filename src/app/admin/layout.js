@@ -13,20 +13,24 @@ export default function AdminLayout({ children }) {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push('/login');
+        window.location.href = '/login';
       } else if (profile && profile.role !== 'admin') {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }
     }
-  }, [user, profile, loading, router]);
+  }, [user, profile, loading]);
 
-  if (loading || !user || profile?.role !== 'admin') {
+  if (loading) {
     return (
       <div className="loading-screen">
         <div className="spinner"></div>
         <p>Verifying admin access...</p>
       </div>
     );
+  }
+
+  if (!user || profile?.role !== 'admin') {
+    return null; // Don't render while redirecting
   }
 
   const navItems = [

@@ -49,13 +49,17 @@ export default function DashboardLayout({ children }) {
     checkSub();
   }, [user]);
 
-  if (loading || checkingSub || !user) {
+  if (loading) {
     return (
       <div className="loading-screen">
         <div className="spinner"></div>
         <p>Loading your dashboard...</p>
       </div>
     );
+  }
+
+  if (!user) {
+    return null; // Return null so the page clears out while `window.location.href = '/login'` executes
   }
 
   const isRestrictedRoute = pathname === '/dashboard/scores';
@@ -160,7 +164,12 @@ export default function DashboardLayout({ children }) {
           </div>
         </header>
 
-        {isLocked ? (
+        {isRestrictedRoute && checkingSub ? (
+          <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <div className="spinner" style={{ margin: '0 auto 1rem' }}></div>
+            <p style={{ color: 'var(--color-text-muted)' }}>Checking subscription status...</p>
+          </div>
+        ) : isLocked ? (
           <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔒</div>
             <h2 style={{ marginBottom: '1rem' }}>Subscription Required</h2>
