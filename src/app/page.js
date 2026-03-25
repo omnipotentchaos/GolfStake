@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import styles from './page.module.css';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -17,6 +18,7 @@ export default function Home() {
   const [prizePool, setPrizePool] = useState(0);
   const [membersCount, setMembersCount] = useState(0);
   const [charityTotal, setCharityTotal] = useState(0);
+  const [featuredCharities, setFeaturedCharities] = useState([]);
 
   // Animate counters on mount
   useEffect(() => {
@@ -38,9 +40,39 @@ export default function Home() {
       
       if (step >= steps) clearInterval(timer);
     }, interval);
-    
     return () => clearInterval(timer);
   }, []);
+
+  // Fetch featured charities from DB
+  useEffect(() => {
+    async function loadCharities() {
+      try {
+        const { data: featured } = await supabase.from('charities').select('*').eq('is_featured', true).limit(4);
+        if (featured && featured.length > 0) {
+          setFeaturedCharities(featured);
+        } else {
+          // Fallback to fetch any charities if none are marked featured yet
+          const { data: anyCharities } = await supabase.from('charities').select('*').limit(4);
+          setFeaturedCharities(anyCharities || []);
+        }
+      } catch (err) {
+        console.error('Error loading featured charities:', err);
+      }
+    }
+    loadCharities();
+  }, []);
+
+  const getCategoryEmoji = (category) => {
+    switch ((category || '').toLowerCase()) {
+      case 'environment': return '🌍';
+      case 'education': return '⛳';
+      case 'health': return '🧠';
+      case 'community': return '🏘️';
+      case 'animals': return '🦊';
+      case 'support': return '🎖️';
+      default: return '❤️';
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -182,22 +214,21 @@ export default function Home() {
           <h2 className="section-title">Impact That Matters</h2>
           <p className="section-subtitle">Choose a charity you believe in. At least 10% of your subscription directly supports their mission.</p>
           <div className={styles.charityGrid}>
-            {[
-              { name: 'Green Future Foundation', desc: 'Protecting our planet through sustainable golf course management and reforestation.', icon: '🌍', raised: '£4,250' },
-              { name: 'Youth Sports Academy', desc: 'Introducing underprivileged youth to golf and mentorship programs worldwide.', icon: '⛳', raised: '£3,820' },
-              { name: 'Mental Health Links', desc: 'Using sport and outdoor activities to improve mental health and wellbeing.', icon: '🧠', raised: '£5,130' },
-              { name: 'Community Builders', desc: 'Building community spaces and sports facilities in underserved areas.', icon: '🏘️', raised: '£3,100' },
-            ].map((charity, i) => (
-              <div key={i} className={`card ${styles.charityCard} animate-fade-in-up delay-${i+1}`}>
-                <div className={styles.charityIcon}>{charity.icon}</div>
-                <h3 className={styles.charityName}>{charity.name}</h3>
-                <p className={styles.charityDesc}>{charity.desc}</p>
-                <div className={styles.charityRaised}>
-                  <span className={styles.charityRaisedValue}>{charity.raised}</span>
-                  <span className={styles.charityRaisedLabel}>raised so far</span>
+            {featuredCharities.length === 0 ? (
+              <div style={{ gridColumn: '1/-1', textAlign: 'center', color: 'var(--color-text-muted)' }}>Loading featured charities...</div>
+            ) : (
+              featuredCharities.map((charity, i) => (
+                <div key={charity.id} className={`card ${styles.charityCard} animate-fade-in-up delay-${(i%4)+1}`}>
+                  <div className={styles.charityIcon}>{getCategoryEmoji(charity.category)}</div>
+                  <h3 className={styles.charityName}>{charity.name}</h3>
+                  <p className={styles.charityDesc}>{charity.description}</p>
+                  <div className={styles.charityRaised}>
+                    <span className={styles.charityRaisedValue}>£{charity.total_received?.toLocaleString() || '0'}</span>
+                    <span className={styles.charityRaisedLabel}>raised so far</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <div style={{ textAlign: 'center', marginTop: 'var(--space-2xl)' }}>
             <button className="btn btn-secondary" onClick={() => router.push('/charities')}>

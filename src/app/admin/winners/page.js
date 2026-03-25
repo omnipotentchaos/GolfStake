@@ -13,17 +13,18 @@ export default function AdminWinnersPage() {
 
   async function fetchWinners() {
     try {
-      // Mocking winners since full table relation simulation is complex for demo
-      // In reality: supabase.from('winners').select('*, profiles(full_name, email), draws(draw_date)')
+      // Fetch real winners from the database including profile names and draw dates
       const { data, error } = await supabase
         .from('winners')
-        .select('*');
+        .select(`
+          *,
+          profiles:profiles!winners_user_id_fkey(full_name),
+          draws(draw_date)
+        `)
+        .order('created_at', { ascending: false });
         
       if (error) throw error;
-      setWinners(data || [
-        { id: '1', user_name: 'John Doe', match_type: '5-match', prize_amount: 4250.00, status: 'pending', date: new Date().toISOString() },
-        { id: '2', user_name: 'Jane Smith', match_type: '4-match', prize_amount: 320.50, status: 'approved', date: new Date().toISOString() }
-      ]);
+      setWinners(data || []);
     } catch (err) {
       console.error('Error fetching winners:', err);
     } finally {
@@ -31,8 +32,18 @@ export default function AdminWinnersPage() {
     }
   }
 
-  const updateStatus = (id, newStatus) => {
-    setWinners(winners.map(w => w.id === id ? { ...w, status: newStatus } : w));
+  const updateStatus = async (id, newStatus) => {
+    try {
+      const { error } = await supabase
+        .from('winners')
+        .update({ verification_status: newStatus })
+        .eq('id', id);
+      if (error) throw error;
+      
+      setWinners(winners.map(w => w.id === id ? { ...w, verification_status: newStatus } : w));
+    } catch (err) {
+      alert('Error updating status: ' + err.message);
+    }
   };
 
   return (
@@ -66,37 +77,57 @@ export default function AdminWinnersPage() {
                 winners.map(winner => (
                   <tr key={winner.id}>
                     <td>
-                      <div style={{ fontWeight: '600' }}>{winner.user_name || 'Golfer'}</div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>ID: {winner.id.substring(0,8)}</div>
+                      <div style={{ fontWeight: '600' }}>{winner.profiles?.full_name || 'Golfer'}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{winner.profiles?.email}</div>
                     </td>
                     <td>
-                      <div>{new Date(winner.date).toLocaleDateString()}</div>
+                      <div>{winner.draws?.draw_date ? new Date(winner.draws.draw_date).toLocaleDateString() : 'N/A'}</div>
                       <div className="badge badge-warning" style={{ marginTop: '0.25rem' }}>{winner.match_type}</div>
                     </td>
                     <td style={{ fontWeight: 'bold', color: 'var(--color-secondary)' }}>
                       £{winner.prize_amount?.toLocaleString() || '0'}
                     </td>
                     <td>
-                      <button className="btn btn-secondary btn-sm" onClick={() => alert('Mock image modal opens')}>
-                        View Image 📷
-                      </button>
+                      {winner.proof_image_url ? (
+                        <a href={winner.proof_image_url} target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm">
+                          View Image 📷
+                        </a>
+                      ) : (
+                        <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Awaiting upload</span>
+                      )}
                     </td>
                     <td>
                       <span className={`badge ${
-                        winner.status === 'approved' ? 'badge-success' : 
-                        winner.status === 'rejected' ? 'badge-error' : 'badge-info'
+                        winner.verification_status === 'approved' ? 'badge-success' : 
+                        winner.verification_status === 'rejected' ? 'badge-error' : 'badge-info'
                       }`}>
-                        {winner.status.toUpperCase()}
+                        {winner.verification_status?.toUpperCase() || 'PENDING'}
                       </span>
                     </td>
                     <td>
-                      {winner.status === 'pending' ? (
+                      {winner.verification_status === 'pending' ? (
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                           <button className="btn btn-sm" style={{ background: 'var(--color-success)', color: 'white' }} onClick={() => updateStatus(winner.id, 'approved')}>Approve</button>
                           <button className="btn btn-sm" style={{ background: 'var(--color-error)', color: 'white' }} onClick={() => updateStatus(winner.id, 'rejected')}>Reject</button>
                         </div>
-                      ) : winner.status === 'approved' ? (
-                        <button className="btn btn-secondary btn-sm">Mark as Paid 💰</button>
+                      ) : winner.verification_status === 'approved' && winner.payment_status === 'pending' ? (
+                        <button className="btn btn-secondary btn-sm" onClick={async () => {
+                          await supabase.from('winners').update({ payment_status: 'paid', paid_at: new Date().toISOString() }).eq('id', winner.id);
+                          
+                          // Dispatch mock email notification
+                          await fetch('/api/notify', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              to: winner.profiles?.email || 'winner@golfstake.com',
+                              subject: 'Your GolfStake Prize is on its way!',
+                              templateName: 'prize_paid',
+                              data: { amount: winner.prize_amount }
+                            })
+                          });
+                          
+                          fetchWinners();
+                        }}>Mark as Paid 💰</button>
                       ) : (
                         <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Resolved</span>
                       )}

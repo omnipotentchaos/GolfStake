@@ -26,10 +26,12 @@ export default function LoginPage() {
     try {
       const cleanEmail = email.trim().replace(/[\u200B-\u200D\uFEFF]/g, '');
       await signIn({ email: cleanEmail, password });
-      router.push('/dashboard');
+      // Hard navigation flushes stale Next.js RSC caching and forces the server 
+      // cookie validation on the protected dashboard routes.
+      window.location.href = '/dashboard';
+      return; 
     } catch (err) {
       setError(err.message || 'Invalid email or password');
-    } finally {
       setLoading(false);
     }
   }

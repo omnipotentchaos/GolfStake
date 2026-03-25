@@ -1,14 +1,17 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
+import { supabase } from '@/lib/supabase';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function DashboardLayout({ children }) {
   const { user, profile, loading, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [subStatus, setSubStatus] = useState(null);
+  const [checkingSub, setCheckingSub] = useState(true);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -16,7 +19,37 @@ export default function DashboardLayout({ children }) {
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  useEffect(() => {
+    async function checkSub() {
+      if (!user) {
+        setCheckingSub(false);
+        return;
+      }
+      try {
+        await Promise.race([
+          (async () => {
+            const { data } = await supabase
+              .from('subscriptions')
+              .select('status')
+              .eq('user_id', user.id)
+              .order('start_date', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+            setSubStatus(data?.status || 'inactive');
+          })(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout checking subscription')), 5000))
+        ]);
+      } catch (e) {
+        console.warn('Subscription fetch timeout or error:', e);
+        setSubStatus('inactive');
+      } finally {
+        setCheckingSub(false);
+      }
+    }
+    checkSub();
+  }, [user]);
+
+  if (loading || checkingSub || !user) {
     return (
       <div className="loading-screen">
         <div className="spinner"></div>
@@ -24,6 +57,9 @@ export default function DashboardLayout({ children }) {
       </div>
     );
   }
+
+  const isRestrictedRoute = pathname === '/dashboard/scores';
+  const isLocked = isRestrictedRoute && subStatus !== 'active';
 
   const handleSignOut = async () => {
     await signOut();
@@ -125,7 +161,20 @@ export default function DashboardLayout({ children }) {
           </div>
         </header>
 
-        {children}
+        {isLocked ? (
+          <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔒</div>
+            <h2 style={{ marginBottom: '1rem' }}>Subscription Required</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem' }}>
+              You need an active subscription to access the scoring engine and participate in monthly charity draws.
+            </p>
+            <Link href="/dashboard/subscription" className="btn btn-primary">
+              View Subscription Plans
+            </Link>
+          </div>
+        ) : (
+          children
+        )}
       </main>
     </div>
   );

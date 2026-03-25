@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 import styles from '../page.module.css';
 
 export default function CharitiesPage() {
@@ -67,9 +68,9 @@ export default function CharitiesPage() {
                 <div className="badge badge-info" style={{ marginBottom: '1rem' }}>{charity.category || 'General'}</div>
                 <h3 className={styles.charityName}>{charity.name}</h3>
                 <p className={styles.charityDesc} style={{ flex: 1 }}>{charity.description}</p>
-                <button className="btn btn-secondary" style={{ width: '100%', marginTop: '1.5rem' }} onClick={() => window.location.href='/signup'}>
-                  Support this Charity
-                </button>
+                <Link href={`/charities/${charity.id}`} className="btn btn-secondary" style={{ width: '100%', marginTop: '1.5rem', display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+                  View Full Profile
+                </Link>
               </div>
             ))
           )}

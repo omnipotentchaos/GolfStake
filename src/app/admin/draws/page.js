@@ -52,16 +52,62 @@ export default function AdminDrawsPage() {
     if (!simulationResult) return;
     
     try {
-      const { error } = await supabase.from('draws').insert({
+      // 1. Insert Draw Record
+      const { data: newDraw, error } = await supabase.from('draws').insert({
         draw_date: new Date().toISOString(),
         status: 'published',
         draw_type: 'algorithmic',
         winning_numbers: simulationResult.numbers,
         prize_pool_total: simulationResult.pool,
         published_at: new Date().toISOString()
-      });
+      }).select().single();
       
       if (error) throw error;
+      
+      // 2. Populate Real Draw Entries
+      const { data: subs } = await supabase.from('subscriptions').select('user_id').eq('status', 'active');
+      if (subs && subs.length > 0) {
+        const userIds = subs.map(s => s.user_id);
+        const { data: scores } = await supabase.from('scores').select('user_id, score').in('user_id', userIds).order('played_date', { ascending: false });
+        
+        if (scores) {
+          const userScores = {};
+          scores.forEach(s => {
+            if (!userScores[s.user_id]) userScores[s.user_id] = [];
+            if (userScores[s.user_id].length < 5) userScores[s.user_id].push(s.score);
+          });
+          
+          const validEntries = [];
+          for (const [userId, nums] of Object.entries(userScores)) {
+            if (nums.length === 5) {
+              validEntries.push({
+                draw_id: newDraw.id,
+                user_id: userId,
+                numbers: nums,
+                entry_date: new Date().toISOString()
+              });
+            }
+          }
+          if (validEntries.length > 0) {
+            await supabase.from('draw_entries').insert(validEntries);
+          }
+        }
+      }
+      
+      // Dispatch mock email notification
+      await fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: 'all_subscribers@golfstake.com',
+          subject: 'New GolfStake Draw Published!',
+          templateName: 'draw_published',
+          data: { 
+            pool: simulationResult.pool,
+            numbers: simulationResult.numbers 
+          }
+        })
+      });
       alert('Draw published successfully!');
       setSimulationResult(null);
       fetchDraws();

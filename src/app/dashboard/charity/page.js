@@ -14,6 +14,8 @@ export default function CharityPage() {
     contribution_percentage: 10
   });
   const [success, setSuccess] = useState('');
+  const [donateAmount, setDonateAmount] = useState('');
+  const [donating, setDonating] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -58,17 +60,15 @@ export default function CharityPage() {
     setSuccess('');
     
     try {
-      // Clean up any old selections to ensure exactly 1 constraint without requiring a schema unique index change
-      await supabase.from('user_charities').delete().eq('user_id', user.id);
-      
+      // Use upsert to handle PostgreSQL Primary Key conflicts natively, preserving historical rows
       const { error } = await supabase
         .from('user_charities')
-        .insert({
+        .upsert({
           user_id: user.id,
           charity_id: userSelection.charity_id,
           contribution_percentage: userSelection.contribution_percentage,
           selected_at: new Date().toISOString()
-        });
+        }, { onConflict: 'user_id,charity_id' });
         
       if (error) throw error;
       setSuccess('Charity preferences updated successfully!');
@@ -78,6 +78,32 @@ export default function CharityPage() {
       alert('Failed to update charity selection');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDonate = async (e) => {
+    e.preventDefault();
+    if (!userSelection.charity_id || !donateAmount || isNaN(donateAmount) || donateAmount <= 0) {
+      alert('Please select a charity and enter a valid amount');
+      return;
+    }
+
+    setDonating(true);
+    try {
+      const { error } = await supabase.from('donations').insert({
+        user_id: user.id,
+        charity_id: userSelection.charity_id,
+        amount: parseFloat(donateAmount),
+        created_at: new Date().toISOString()
+      });
+      if (error) throw error;
+      setDonateAmount('');
+      setSuccess(`Successfully donated £${donateAmount}! (Mock Payment Processed)`);
+      setTimeout(() => setSuccess(''), 4000);
+    } catch (err) {
+      alert('Donation failed: ' + err.message);
+    } finally {
+      setDonating(false);
     }
   };
 
@@ -159,6 +185,38 @@ export default function CharityPage() {
             );
           })
         )}
+      </div>
+
+      {/* Independent Donation */}
+      <div className="card" style={{ marginBottom: '2rem', border: '1px solid var(--color-accent)' }}>
+        <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--color-accent)' }}>Make a One-Off Donation</h3>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+          Want to support your selected organization directly? 100% of this donation goes immediately to them.
+        </p>
+        <form onSubmit={handleDonate} style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ position: 'relative', width: '200px' }}>
+            <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 'bold' }}>£</span>
+            <input 
+              type="number" 
+              min="1" 
+              step="1"
+              className="form-input" 
+              placeholder="Amount" 
+              value={donateAmount}
+              onChange={e => setDonateAmount(e.target.value)}
+              style={{ paddingLeft: '2.5rem' }}
+            />
+          </div>
+          <button 
+            type="submit" 
+            className="btn btn-secondary" 
+            disabled={donating || !userSelection.charity_id}
+            style={{ color: 'var(--color-success)', borderColor: 'var(--color-success)' }}
+          >
+            {donating ? 'Processing...' : 'Donate Now'}
+          </button>
+        </form>
+        {!userSelection.charity_id && <div style={{ fontSize: '0.8rem', color: 'var(--color-warning)', marginTop: '0.5rem' }}>* Select an organization above first</div>}
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid var(--color-border)', paddingTop: '2rem' }}>
