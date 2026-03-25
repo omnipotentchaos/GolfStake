@@ -40,6 +40,11 @@ export default function Home() {
           if (charitiesList && charitiesList.length > 0) {
             const actualCharity = charitiesList.reduce((acc, c) => acc + Number(c.total_received || 0), 0);
             if (actualCharity > 0) targets.charity = actualCharity;
+          }
+        } catch (err) {
+          console.warn('Using fallback stats for counter:', err);
+        }
+
       const duration = 2000;
       const steps = 60;
       const interval = duration / steps;
