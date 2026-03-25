@@ -20,27 +20,51 @@ export default function Home() {
   const [charityTotal, setCharityTotal] = useState(0);
   const [featuredCharities, setFeaturedCharities] = useState([]);
 
-  // Animate counters on mount
+  // Animate dynamic DB counters on mount
   useEffect(() => {
-    const duration = 2000;
-    const steps = 60;
-    const interval = duration / steps;
-    
-    const targets = { prize: 24850, members: 1247, charity: 18320 };
-    let step = 0;
-    
-    const timer = setInterval(() => {
-      step++;
-      const progress = step / steps;
-      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    async function loadStatsAndAnimate() {
+      let targets = { prize: 24850, members: 1247, charity: 18320 };
       
-      setPrizePool(Math.floor(targets.prize * eased));
-      setMembersCount(Math.floor(targets.members * eased));
-      setCharityTotal(Math.floor(targets.charity * eased));
+      try {
+        const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+        if (usersCount) targets.members = usersCount;
+
+        const { data: draws } = await supabase.from('draws').select('prize_pool_total');
+        if (draws && draws.length > 0) {
+          targets.prize = draws.reduce((acc, d) => acc + Number(d.prize_pool_total || 0), 0);
+        }
+
+        const { data: charitiesList } = await supabase.from('charities').select('total_received');
+        if (charitiesList && charitiesList.length > 0) {
+          targets.charity = charitiesList.reduce((acc, c) => acc + Number(c.total_received || 0), 0);
+        }
+      } catch (err) {
+        console.warn('Using fallback stats for counter:', err);
+      }
+
+      const duration = 2000;
+      const steps = 60;
+      const interval = duration / steps;
+      let step = 0;
       
-      if (step >= steps) clearInterval(timer);
-    }, interval);
-    return () => clearInterval(timer);
+      const timer = setInterval(() => {
+        step++;
+        const progress = step / steps;
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        
+        setPrizePool(Math.floor(targets.prize * eased));
+        setMembersCount(Math.floor(targets.members * eased));
+        setCharityTotal(Math.floor(targets.charity * eased));
+        
+        if (step >= steps) clearInterval(timer);
+      }, interval);
+      
+      return timer;
+    }
+    
+    let timerRef;
+    loadStatsAndAnimate().then(t => { timerRef = t; });
+    return () => { if (timerRef) clearInterval(timerRef); };
   }, []);
 
   // Fetch featured charities from DB
