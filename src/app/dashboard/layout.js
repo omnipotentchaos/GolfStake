@@ -79,7 +79,7 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-logo">
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'inherit' }}>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'inherit', textDecoration: 'none' }}>
             <span className="logo-icon" style={{ 
               width: '32px', height: '32px', 
               background: 'var(--gradient-button)', 
@@ -87,7 +87,7 @@ export default function DashboardLayout({ children }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center' 
             }}>⬡</span>
             GolfStake
-          </Link>
+          </a>
         </div>
 
         <nav className="sidebar-nav">
@@ -95,25 +95,24 @@ export default function DashboardLayout({ children }) {
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
-                prefetch={false}
                 className={`sidebar-link ${isActive ? 'sidebar-link-active' : ''}`}
               >
                 <span className="sidebar-icon">{item.icon}</span>
                 {item.label}
-              </Link>
+              </a>
             );
           })}
           
           {profile?.role === 'admin' && (
             <>
               <div className="sidebar-section-label" style={{ marginTop: '2rem' }}>Administration</div>
-              <Link href="/admin" prefetch={false} className="sidebar-link">
+              <a href="/admin" className="sidebar-link">
                 <span className="sidebar-icon">⚙️</span>
                 Admin Panel
-              </Link>
+              </a>
             </>
           )}
         </nav>
@@ -155,9 +154,9 @@ export default function DashboardLayout({ children }) {
             </p>
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <Link href="/dashboard/scores" className="btn btn-primary btn-sm">
+            <a href="/dashboard/scores" className="btn btn-primary btn-sm">
               + Enter Score
-            </Link>
+            </a>
           </div>
         </header>
 
@@ -168,9 +167,9 @@ export default function DashboardLayout({ children }) {
             <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem' }}>
               You need an active subscription to access the scoring engine and participate in monthly charity draws.
             </p>
-            <Link href="/dashboard/subscription" className="btn btn-primary">
+            <a href="/dashboard/subscription" className="btn btn-primary">
               View Subscription Plans
-            </Link>
+            </a>
           </div>
         ) : (
           children
