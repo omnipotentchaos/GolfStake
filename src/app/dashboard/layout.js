@@ -15,9 +15,9 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      window.location.href = '/login';
     }
-  }, [user, loading, router]);
+  }, [user, loading]);
 
   useEffect(() => {
     async function checkSub() {
