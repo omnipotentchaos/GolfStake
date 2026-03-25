@@ -20,6 +20,9 @@ export default function SubscriptionPage() {
   }, []);
 
   useEffect(() => {
+    let active = true;
+    let timer;
+
     async function loadData() {
       if (!user) return;
       try {
@@ -30,14 +33,33 @@ export default function SubscriptionPage() {
           .order('start_date', { ascending: false })
           .limit(1)
           .maybeSingle();
-        setSubscription(data);
+        
+        if (active) {
+          setSubscription(data);
+          setLoading(false);
+        }
+
+        // If returned from Stripe successfully, but DB hasn't updated yet, poll every 2 seconds
+        if (typeof window !== 'undefined') {
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('success') && (!data || data.status !== 'active')) {
+            if (active) {
+              timer = setTimeout(loadData, 2000);
+            }
+          }
+        }
       } catch (err) {
         console.error('Error loading subscription:', err);
-      } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     }
+
     loadData();
+
+    return () => {
+      active = false;
+      if (timer) clearTimeout(timer);
+    };
   }, [user]);
 
   const handleSubscribe = async (planType, price) => {
