@@ -12,6 +12,14 @@ export default function SubscriptionPage() {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('success')) setSuccess('Subscription successful! Welcome to the club.');
+      if (params.get('cancelled')) setSuccess('Checkout cancelled.');
+    }
+  }, []);
+
+  useEffect(() => {
     async function loadData() {
       if (!user) return;
       try {
@@ -36,46 +44,28 @@ export default function SubscriptionPage() {
     setProcessing(true);
     setSuccess('');
     
-    // Simulate Stripe Checkout delay
-    setTimeout(async () => {
-      try {
-        const now = new Date();
-        const endDate = new Date();
-        if (planType === 'yearly') {
-          endDate.setFullYear(now.getFullYear() + 1);
-        } else {
-          endDate.setMonth(now.getMonth() + 1);
-        }
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planType,
+          userId: user.id,
+          userEmail: user.email,
+        }),
+      });
 
-        // Cleanup any old subscriptions first to enforce 1-active-sub rule
-        await supabase.from('subscriptions').delete().eq('user_id', user.id);
-        
-        const { data, error } = await supabase
-          .from('subscriptions')
-          .insert({
-            user_id: user.id,
-            plan: planType,
-            status: 'active',
-            price_paid: price,
-            start_date: now.toISOString(),
-            end_date: endDate.toISOString(),
-            renewal_date: endDate.toISOString(),
-            stripe_subscription_id: 'mock_sub_' + Math.random().toString(36).substr(2, 9)
-          })
-          .select()
-          .single();
-
-        if (error) throw error;
-        
-        setSubscription(data);
-        setSuccess('Successfully subscribed! Payment processed via mock gateway.');
-      } catch (err) {
-        console.error(err);
-        alert('Subscription failed');
-      } finally {
-        setProcessing(false);
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+      
+      if (data.url) {
+        window.location.href = data.url;
       }
-    }, 2000);
+    } catch (err) {
+      console.error(err);
+      alert('Subscription failed: ' + err.message);
+      setProcessing(false);
+    }
   };
 
   const handleCancel = async () => {
@@ -132,13 +122,12 @@ export default function SubscriptionPage() {
               <div>{new Date(subscription.renewal_date).toLocaleDateString()}</div>
             </div>
             <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--color-border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Payment Method</div>
-              <div>💳 •••• •••• •••• 4242 (Mock Stripe)</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Payment Info</div>
+              <div>💳 Managed securely via Stripe</div>
             </div>
           </div>
           
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-            <button className="btn btn-secondary" onClick={() => alert('Update payment method mock')}>Update Payment</button>
             <button className="btn" style={{ color: 'var(--color-error)' }} onClick={handleCancel} disabled={processing}>Cancel Plan</button>
           </div>
         </div>
