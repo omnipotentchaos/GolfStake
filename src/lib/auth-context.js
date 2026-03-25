@@ -35,13 +35,16 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session safely
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
       }
+    }).catch(err => {
+      console.warn('Session access restricted by browser:', err);
+    }).finally(() => {
       setLoading(false);
     });
 
