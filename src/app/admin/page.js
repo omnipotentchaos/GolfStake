@@ -68,7 +68,7 @@ export default function AdminDashboardPage() {
 
         <div className="stat-card" style={{ background: 'linear-gradient(145deg, rgba(155, 81, 224, 0.05) 0%, rgba(17, 13, 26, 0.4) 100%)', borderColor: 'rgba(155, 81, 224, 0.1)' }}>
           <div className="stat-label">MRR (Monthly Revenue)</div>
-          <div className="stat-value">£{stats.monthlyRevenue.toFixed(2)}</div>
+          <div className="stat-value">₹{stats.monthlyRevenue.toFixed(2)}</div>
         </div>
         
         <div className="stat-card" style={{ background: 'linear-gradient(145deg, rgba(255, 179, 71, 0.05) 0%, rgba(17, 13, 26, 0.4) 100%)', borderColor: 'rgba(255, 179, 71, 0.1)' }}>
@@ -101,7 +101,7 @@ export default function AdminDashboardPage() {
             </div>
             <div>
               <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Estimated Prize Pool</div>
-              <div style={{ fontWeight: '600', color: 'var(--color-secondary)' }}>£{stats.prizePoolTotal.toFixed(2)}</div>
+              <div style={{ fontWeight: '600', color: 'var(--color-secondary)' }}>₹{stats.prizePoolTotal.toFixed(2)}</div>
             </div>
             <div>
               <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>Eligible Participants</div>
@@ -120,7 +120,7 @@ export default function AdminDashboardPage() {
           <div style={{ textAlign: 'center', padding: '1rem 0 2rem' }}>
             <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Total Raised</div>
             <div style={{ fontSize: '3rem', fontWeight: '800', background: 'linear-gradient(135deg, #00C896, #4DA6FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              £{stats.charityTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              ₹{stats.charityTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
           

@@ -31,7 +31,7 @@ export async function POST(request) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const { userId, planType } = session.metadata;
-    const price = planType === 'yearly' ? 99.99 : 9.99;
+    const price = planType === 'yearly' ? 1000 : 500;
 
     const now = new Date();
     const endDate = new Date();

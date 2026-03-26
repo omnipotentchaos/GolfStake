@@ -98,7 +98,7 @@ export default function CharityPage() {
       });
       if (error) throw error;
       setDonateAmount('');
-      setSuccess(`Successfully donated £${donateAmount}! (Mock Payment Processed)`);
+      setSuccess(`Successfully donated ₹${donateAmount}! (Mock Payment Processed)`);
       setTimeout(() => setSuccess(''), 4000);
     } catch (err) {
       alert('Donation failed: ' + err.message);
@@ -195,7 +195,7 @@ export default function CharityPage() {
         </p>
         <form onSubmit={handleDonate} style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <div style={{ position: 'relative', width: '200px' }}>
-            <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 'bold' }}>£</span>
+            <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: 'bold' }}>₹</span>
             <input 
               type="number" 
               min="1" 

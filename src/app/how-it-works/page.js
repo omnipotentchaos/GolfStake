@@ -20,7 +20,7 @@ export default function HowItWorksPage() {
           <div className="card glass-card">
             <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-secondary)' }}>1. Subscribe & Choose Charity</h2>
             <p style={{ color: 'var(--color-text-secondary)', lineHeight: '1.8' }}>
-              Select a monthly (£9.99) or yearly (£99.99) subscription. During signup, you choose a verified charity from our directory. A minimum of 10% (up to 50% if you choose) of your subscription goes directly to that charity every single month. Real impact, automatically.
+              Select a monthly (₹500) or yearly (₹1000) subscription. During signup, you choose a verified charity from our directory. A minimum of 10% (up to 50% if you choose) of your subscription goes directly to that charity every single month. Real impact, automatically.
             </p>
           </div>
 

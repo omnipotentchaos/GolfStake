@@ -225,7 +225,7 @@ export default function AdminDrawsPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Total Pool Selected</div>
-                  <div style={{ fontWeight: '600' }}>£{simulationResult.pool.toLocaleString()}</div>
+                  <div style={{ fontWeight: '600' }}>₹{simulationResult.pool.toLocaleString()}</div>
                 </div>
                 <button className="btn btn-secondary" style={{ color: 'var(--color-success)', borderColor: 'var(--color-success)' }} onClick={publishSimulatedDraw}>
                   Publish Final Results
@@ -257,7 +257,7 @@ export default function AdminDrawsPage() {
                   <td>{new Date(d.draw_date).toLocaleDateString()}</td>
                   <td style={{ textTransform: 'capitalize' }}>{d.draw_type}</td>
                   <td style={{ letterSpacing: '2px', fontWeight: 'bold' }}>{d.winning_numbers?.join(' - ') || 'N/A'}</td>
-                  <td>£{d.prize_pool_total?.toLocaleString() || '0'}</td>
+                  <td>₹{d.prize_pool_total?.toLocaleString() || '0'}</td>
                   <td>
                     <span className={`badge ${d.status === 'published' ? 'badge-success' : 'badge-warning'}`}>
                       {d.status.toUpperCase()}

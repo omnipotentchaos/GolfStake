@@ -10,8 +10,8 @@
 
 // Subscription pricing
 export const SUBSCRIPTION_PRICES = {
-  monthly: 9.99,
-  yearly: 99.99,
+  monthly: 500,
+  yearly: 1000,
 };
 
 // Percentage of subscription that goes to prize pool

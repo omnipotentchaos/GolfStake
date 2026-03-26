@@ -229,14 +229,14 @@ function SignupForm() {
                   <input type="radio" name="plan" value="monthly" checked={formData.plan === 'monthly'} onChange={e => updateField('plan', e.target.value)} />
                   <div>
                     <div className={styles.planName}>Monthly</div>
-                    <div className={styles.planPrice}>£9.99<span>/month</span></div>
+                    <div className={styles.planPrice}>₹500<span>/month</span></div>
                   </div>
                 </label>
                 <label className={`${styles.planOption} ${formData.plan === 'yearly' ? styles.planSelected : ''}`}>
                   <input type="radio" name="plan" value="yearly" checked={formData.plan === 'yearly'} onChange={e => updateField('plan', e.target.value)} />
                   <div>
                     <div className={styles.planName}>Yearly <span className="badge badge-success" style={{ marginLeft: '0.5rem' }}>SAVE 17%</span></div>
-                    <div className={styles.planPrice}>£99.99<span>/year</span></div>
+                    <div className={styles.planPrice}>₹1000<span>/year</span></div>
                   </div>
                 </label>
               </div>

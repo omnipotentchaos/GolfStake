@@ -85,7 +85,7 @@ export default function AdminWinnersPage() {
                       <div className="badge badge-warning" style={{ marginTop: '0.25rem' }}>{winner.match_type}</div>
                     </td>
                     <td style={{ fontWeight: 'bold', color: 'var(--color-secondary)' }}>
-                      £{winner.prize_amount?.toLocaleString() || '0'}
+                      ₹{winner.prize_amount?.toLocaleString() || '0'}
                     </td>
                     <td>
                       {winner.proof_image_url ? (

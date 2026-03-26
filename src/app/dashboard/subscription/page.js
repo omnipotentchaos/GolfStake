@@ -131,7 +131,7 @@ export default function SubscriptionPage() {
               <span className="badge badge-success">ACTIVE</span>
               {subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)} Plan
             </h3>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>£{subscription.price_paid}</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>₹{subscription.price_paid}</div>
           </div>
           
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', padding: '1rem', background: 'var(--color-bg)', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
@@ -158,7 +158,7 @@ export default function SubscriptionPage() {
           {/* Monthly Plan */}
           <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Monthly</h3>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>£9.99<span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 'normal' }}>/mo</span></div>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>₹500<span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 'normal' }}>/mo</span></div>
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem', gap: '0.5rem', display: 'flex', flexDirection: 'column', color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
               <li>✓ Monthly prize draw entry</li>
               <li>✓ Score tracking</li>
@@ -168,7 +168,7 @@ export default function SubscriptionPage() {
             <button 
               className="btn btn-secondary" 
               style={{ width: '100%', marginTop: 'auto' }}
-              onClick={() => handleSubscribe('monthly', 9.99)}
+              onClick={() => handleSubscribe('monthly', 500)}
               disabled={processing}
             >
               Subscribe Monthly
@@ -181,7 +181,7 @@ export default function SubscriptionPage() {
               SAVE 17%
             </div>
             <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Yearly</h3>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem', color: 'var(--color-secondary)' }}>£99.99<span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 'normal' }}>/yr</span></div>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1.5rem', color: 'var(--color-secondary)' }}>₹1000<span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 'normal' }}>/yr</span></div>
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem', gap: '0.5rem', display: 'flex', flexDirection: 'column', color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
               <li>✓ Everything in Monthly</li>
               <li>✓ 2 months free</li>
@@ -191,7 +191,7 @@ export default function SubscriptionPage() {
             <button 
               className="btn btn-primary" 
               style={{ width: '100%', marginTop: 'auto' }}
-              onClick={() => handleSubscribe('yearly', 99.99)}
+              onClick={() => handleSubscribe('yearly', 1000)}
               disabled={processing}
             >
               Subscribe Yearly

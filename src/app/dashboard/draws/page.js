@@ -102,7 +102,7 @@ export default function DrawsPage() {
                 </div>
                 
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-secondary)' }}>£{win.prize_amount?.toLocaleString() || '0'}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-secondary)' }}>₹{win.prize_amount?.toLocaleString() || '0'}</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Status: {win.payment_status?.toUpperCase() || 'PENDING'}</div>
                 </div>
                 
@@ -151,7 +151,7 @@ export default function DrawsPage() {
                 ACTIVE
               </div>
               <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-secondary)', marginBottom: '0.25rem' }}>
-                £{draw.prize_pool_total?.toLocaleString() || '0'}
+                ₹{draw.prize_pool_total?.toLocaleString() || '0'}
               </div>
               <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Estimated Prize Pool</div>
               
@@ -162,7 +162,7 @@ export default function DrawsPage() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ color: 'var(--color-text-muted)' }}>Jackpot Rollover</div>
-                  <div style={{ fontWeight: '600', color: 'var(--color-accent)' }}>£{draw.jackpot_rollover?.toLocaleString() || '0'}</div>
+                  <div style={{ fontWeight: '600', color: 'var(--color-accent)' }}>₹{draw.jackpot_rollover?.toLocaleString() || '0'}</div>
                 </div>
               </div>
             </div>
@@ -180,7 +180,7 @@ export default function DrawsPage() {
             <div key={draw.id} className="card" style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '1.5rem' }}>
               <div style={{ minWidth: '120px' }}>
                 <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>{new Date(draw.draw_date).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</div>
-                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Total Pool: £{draw.prize_pool_total?.toLocaleString()}</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>Total Pool: ₹{draw.prize_pool_total?.toLocaleString()}</div>
               </div>
               
               <div style={{ flex: 1 }}>

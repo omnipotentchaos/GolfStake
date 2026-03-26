@@ -100,7 +100,7 @@ export default function DashboardPage() {
 
         <div className="stat-card">
           <div className="stat-label">Total Won</div>
-          <div className="stat-value">£{stats.totalWon.toFixed(2)}</div>
+          <div className="stat-value">₹{stats.totalWon.toFixed(2)}</div>
           <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
             Lifetime prize winnings
           </p>
@@ -168,7 +168,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Estimated Jackpot Pool</div>
-              <div style={{ fontWeight: '600', color: 'var(--color-secondary)', fontSize: '1.2rem' }}>£9,840</div>
+              <div style={{ fontWeight: '600', color: 'var(--color-secondary)', fontSize: '1.2rem' }}>₹9,840</div>
             </div>
             <div>
               <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Your Status</div>

@@ -152,7 +152,7 @@ export default function AdminCharitiesPage() {
                       </div>
                     </td>
                     <td><span className="badge badge-info">{charity.category}</span></td>
-                    <td>£{charity.total_received?.toLocaleString() || '0'}</td>
+                    <td>₹{charity.total_received?.toLocaleString() || '0'}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button className="btn btn-secondary btn-sm" onClick={() => { setCurrent(charity); setIsEditing(true); }}>Edit</button>

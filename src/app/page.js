@@ -163,7 +163,7 @@ export default function Home() {
           {/* Live Stats */}
           <div className={styles.heroStats}>
             <div className={styles.heroStat}>
-              <span className={styles.heroStatValue}>£{prizePool.toLocaleString()}</span>
+              <span className={styles.heroStatValue}>₹{prizePool.toLocaleString()}</span>
               <span className={styles.heroStatLabel}>Current Prize Pool</span>
             </div>
             <div className={styles.heroStatDivider}></div>
@@ -173,7 +173,7 @@ export default function Home() {
             </div>
             <div className={styles.heroStatDivider}></div>
             <div className={styles.heroStat}>
-              <span className={styles.heroStatValue}>£{charityTotal.toLocaleString()}</span>
+              <span className={styles.heroStatValue}>₹{charityTotal.toLocaleString()}</span>
               <span className={styles.heroStatLabel}>Donated to Charities</span>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function Home() {
                   <h3 className={styles.charityName}>{charity.name}</h3>
                   <p className={styles.charityDesc}>{charity.description}</p>
                   <div className={styles.charityRaised}>
-                    <span className={styles.charityRaisedValue}>£{charity.total_received?.toLocaleString() || '0'}</span>
+                    <span className={styles.charityRaisedValue}>₹{charity.total_received?.toLocaleString() || '0'}</span>
                     <span className={styles.charityRaisedLabel}>raised so far</span>
                   </div>
                 </div>
@@ -274,8 +274,8 @@ export default function Home() {
             <div className={`${styles.pricingCard}`}>
               <div className={styles.pricingPlan}>Monthly</div>
               <div className={styles.pricingPrice}>
-                <span className={styles.pricingCurrency}>£</span>
-                <span className={styles.pricingAmount}>9.99</span>
+                <span className={styles.pricingCurrency}>₹</span>
+                <span className={styles.pricingAmount}>500</span>
                 <span className={styles.pricingPeriod}>/month</span>
               </div>
               <ul className={styles.pricingFeatures}>
@@ -293,8 +293,8 @@ export default function Home() {
               <div className={styles.pricingSave}>SAVE 17%</div>
               <div className={styles.pricingPlan}>Yearly</div>
               <div className={styles.pricingPrice}>
-                <span className={styles.pricingCurrency}>£</span>
-                <span className={styles.pricingAmount}>99.99</span>
+                <span className={styles.pricingCurrency}>₹</span>
+                <span className={styles.pricingAmount}>1000</span>
                 <span className={styles.pricingPeriod}>/year</span>
               </div>
               <ul className={styles.pricingFeatures}>
