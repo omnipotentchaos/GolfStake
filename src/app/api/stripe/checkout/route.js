@@ -17,8 +17,8 @@ export async function POST(request) {
       customer_email: userEmail,
       line_items: [{ price: priceId, quantity: 1 }],
       metadata: { userId, planType },
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/subscription?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/subscription?cancelled=true`,
+      success_url: `${request.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL}/dashboard/subscription?success=true`,
+      cancel_url: `${request.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL}/dashboard/subscription?cancelled=true`,
     });
 
     return NextResponse.json({ url: session.url });
